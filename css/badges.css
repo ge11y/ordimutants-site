@@ -1,0 +1,28 @@
+/* Badge styling for emoji-based badges */
+
+.sat-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 4px;
+  font-size: 0.875rem;
+  margin: 1px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.4);
+  border: 1px solid rgba(255,255,255,0.3);
+}
+
+.sat-badge-more {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 4px;
+  font-size: 0.625rem;
+  margin: 1px;
+  background: #444;
+  color: #fff;
+  border: 1px solid #666;
+}

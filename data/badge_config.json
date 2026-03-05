@@ -1,0 +1,92 @@
+{
+  "Vintage": {
+    "icon": "\ud83d\udd50",
+    "color": "#fbbf24",
+    "name": "Vintage"
+  },
+  "Silk Road": {
+    "icon": "\ud83d\udc2a",
+    "color": "#a0522d",
+    "name": "Silk Road"
+  },
+  "Hitman": {
+    "icon": "\ud83c\udfaf",
+    "color": "#dc143c",
+    "name": "Hitman"
+  },
+  "Pizza": {
+    "icon": "\ud83c\udf55",
+    "color": "#ff6347",
+    "name": "Pizza"
+  },
+  "JPEG": {
+    "icon": "\ud83d\udcf8",
+    "color": "#ff69b4",
+    "name": "JPEG"
+  },
+  "Nakamoto": {
+    "icon": "\ud83d\udc64",
+    "color": "#4a4a4a",
+    "name": "Nakamoto"
+  },
+  "Block 9": {
+    "icon": "9\ufe0f\u20e3",
+    "color": "#ffffff",
+    "name": "Block 9"
+  },
+  "Block 286": {
+    "icon": "286",
+    "color": "#ffd700",
+    "name": "Block 286"
+  },
+  "Black Uncommon": {
+    "icon": "\u2b1b",
+    "color": "#000000",
+    "name": "Black Uncommon"
+  },
+  "First Transaction": {
+    "icon": "\ud83d\udd3a",
+    "color": "#8b4513",
+    "name": "First Transaction"
+  },
+  "Palindrome": {
+    "icon": "\ud83e\udd8b",
+    "color": "#ff00ff",
+    "name": "Palindrome"
+  },
+  "Paliblock Palindrome": {
+    "icon": "\ud83e\udd8b\u2b1b",
+    "color": "#000000",
+    "name": "Paliblock Palindrome"
+  },
+  "Block 666": {
+    "icon": "\ud83d\udc79",
+    "color": "#8b0000",
+    "name": "Block 666"
+  },
+  "Block 78": {
+    "icon": "7\ufe0f\u20e38\ufe0f\u20e3",
+    "color": "#9400d3",
+    "name": "Block 78"
+  },
+  "Omega": {
+    "icon": "\u03a9",
+    "color": "#00ff00",
+    "name": "Omega"
+  },
+  "Alpha": {
+    "icon": "\u0391",
+    "color": "#00ffff",
+    "name": "Alpha"
+  },
+  "Uncommon": {
+    "icon": "\u25c6",
+    "color": "#228b22",
+    "name": "Uncommon"
+  },
+  "Block 9 450x": {
+    "icon": "9\ufe0f\u20e3\ud83d\udc8e",
+    "color": "#ff1493",
+    "name": "Block 9 450x"
+  }
+}
