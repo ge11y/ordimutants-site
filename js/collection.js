@@ -115,6 +115,13 @@ function sortMutants(mutants, sortBy) {
       if (rarityA !== rarityB) return rarityA - rarityB;
       return b.rarityScore - a.rarityScore;
     });
+    case 'rarity_asc': return sorted.sort((a, b) => {
+      // Sort from least rare (common) to most rare (mythic)
+      const rarityA = rarityConfig[a.status]?.sort || 999;
+      const rarityB = rarityConfig[b.status]?.sort || 999;
+      if (rarityA !== rarityB) return rarityB - rarityA; // reversed!
+      return a.rarityScore - b.rarityScore;
+    });
     case 'number': return sorted.sort((a, b) => (a.number || 9999) - (b.number || 9999));
     case 'score': return sorted.sort((a, b) => b.rarityScore - a.rarityScore);
     default: return sorted;

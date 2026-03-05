@@ -632,6 +632,61 @@
       background: var(--bg-mid);
     }
     
+    /* Satoshi Sections */
+    .satoshi-section {
+      background: rgba(0,0,0,0.3);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+    }
+    
+    .satoshi-section h3 {
+      color: var(--accent);
+      margin-bottom: 1rem;
+      font-size: 1.2rem;
+    }
+    
+    .satoshi-section p {
+      color: var(--text-dim);
+      line-height: 1.6;
+    }
+    
+    /* Rare Sats Grid */
+    .rare-sats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+    
+    .rare-sat-item {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.75rem;
+      background: rgba(0,0,0,0.2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+    }
+    
+    .rare-sat-icon {
+      width: 32px;
+      height: 32px;
+      flex-shrink: 0;
+    }
+    
+    .rare-sat-item span {
+      font-weight: 600;
+      color: var(--text);
+    }
+    
+    .rare-sat-item small {
+      display: block;
+      font-size: 0.7rem;
+      color: var(--text-dim);
+    }
+    
     /* Rarities */
     .rarity-list {
       display: flex;
@@ -737,6 +792,7 @@
           <button class="sort-btn" data-sort="rarity" onclick="setSort('rarity')">By Rarity</button>
           <button class="sort-btn" data-sort="number" onclick="setSort('number')">By Number</button>
           <button class="sort-btn" data-sort="score" onclick="setSort('score')">By Score</button>
+          <button class="sort-btn" data-sort="rarity_asc" onclick="setSort('rarity_asc')" title="Least Rare → Most Rare">↕ Least Rare</button>
         </div>
         <div class="collection-stats">
           <span id="collection-count">Loading...</span>
@@ -751,43 +807,42 @@
     
     <!-- Satoshis -->
     <section id="satoshis">
-      <h2>Satoshi Range</h2>
-      <table class="satoshis-table">
-        <thead>
-          <tr>
-            <th>Range</th>
-            <th>Start</th>
-            <th>End</th>
-            <th>Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>Genesis</td>
-            <td>0</td>
-            <td>9,999</td>
-            <td>Inscribed</td>
-          </tr>
-          <tr>
-            <td>Ancient</td>
-            <td>10,000</td>
-            <td>49,999</td>
-            <td>Inscribed</td>
-          </tr>
-          <tr>
-            <td>Rare</td>
-            <td>50,000</td>
-            <td>99,999</td>
-            <td>Available</td>
-          </tr>
-          <tr>
-            <td>Common</td>
-            <td>100,000</td>
-            <td>1,000,000</td>
-            <td>Available</td>
-          </tr>
-        </tbody>
-      </table>
+      <h2>🪙 Rare Satoshis</h2>
+      
+      <!-- Part 1: What are Satoshis? -->
+      <div class="satoshi-section">
+        <h3>What are Satoshis?</h3>
+        <p>Each OrdiMutant is inscribed on a unique Satoshi (sat) - the smallest unit of Bitcoin (0.00000001 BTC). Some Satoshis are rarer than others due to their position in Bitcoin's history, making them highly valuable to collectors.</p>
+      </div>
+      
+      <!-- Part 2: Rare Satoshi Types -->
+      <div class="satoshi-section">
+        <h3>Rare Satoshi Types</h3>
+        <div class="rare-sats-grid">
+          <div class="rare-sat-item"><img src="badges/badge_10.png" class="rare-sat-icon"> <span>Block 9</span> <small>First sat of block 9</small></div>
+          <div class="rare-sat-item"><img src="badges/badge_11.png" class="rare-sat-icon"> <span>Block 286</span> <small>First sat of block 286</small></div>
+          <div class="rare-sat-item"><img src="badges/badge_07.png" class="rare-sat-icon"> <span>Block 666</span> <small>First sat of block 666</small></div>
+          <div class="rare-sat-item"><img src="badges/badge_17.png" class="rare-sat-icon"> <span>Block 78</span> <small>First sat of block 78</small></div>
+          <div class="rare-sat-item"><img src="badges/badge_15.png" class="rare-sat-icon"> <span>Palindrome</span> <small>Reads same forward/back</small></div>
+          <div class="rare-sat-item"><img src="badges/badge_02.png" class="rare-sat-icon"> <span>Vintage</span> <small>Early Bitcoin era</small></div>
+          <div class="rare-sat-item"><img src="badges/badge_03.png" class="rare-sat-icon"> <span>Silk Road</span> <small>Dark web market era</small></div>
+          <div class="rare-sat-item"><img src="badges/badge_04.png" class="rare-sat-icon"> <span>Hitman</span> <small>Hitman era sats</small></div>
+          <div class="rare-sat-item"><img src="badges/badge_05.png" class="rare-sat-icon"> <span>Pizza</span> <small>10k BTC pizza era</small></div>
+          <div class="rare-sat-item"><img src="badges/badge_06.png" class="rare-sat-icon"> <span>JPEG</span> <small>Ordinals era begins</small></div>
+          <div class="rare-sat-item"><img src="badges/badge_08.png" class="rare-sat-icon"> <span>Nakamoto</span> <small>Satoshi's blocks</small></div>
+          <div class="rare-sat-item"><img src="badges/badge_16.png" class="rare-sat-icon"> <span>First Transaction</span> <small>First BTC transfer</small></div>
+          <div class="rare-sat-item"><img src="badges/badge_12.png" class="rare-sat-icon"> <span>Black Uncommon</span> <small>First sat of rare blocks</small></div>
+          <div class="rare-sat-item"><img src="badges/badge_14.png" class="rare-sat-icon"> <span>Omega</span> <small>First difficulty era</small></div>
+          <div class="rare-sat-item"><img src="badges/badge_01.png" class="rare-sat-icon"> <span>Alpha</span> <small>The very first sat</small></div>
+          <div class="rare-sat-item"><img src="badges/badge_10.png" class="rare-sat-icon"> <span>Block 9 450x</span> <small>First sat, 450x rarity</small></div>
+        </div>
+      </div>
+      
+      <!-- Part 3: Rare Satoshi Prices -->
+      <div class="satoshi-section">
+        <h3>Rare Satoshi Prices</h3>
+        <p><em>Coming soon - live price tracking for rare Satoshis</em></p>
+      </div>
     </section>
     
     <!-- Rarities -->
