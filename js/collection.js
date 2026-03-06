@@ -172,7 +172,6 @@ function getRareSatBadge(mutantNumber) {
     </div>
   </div>`;
 }
-}
 
 function renderCollection() {
   const grid = document.getElementById('collection-grid');
