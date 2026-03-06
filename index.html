@@ -1,842 +1,964 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Ordi Mutants — Mutate or Burn</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            ancient: {
-              black: '#0a0908',
-              dark: '#1a1614',
-              blood: '#4a1c1c',
-              rust: '#8b4513',
-              bone: '#d4c5a9',
-              moss: '#3d4a2d',
-            },
-            cult: {
-              orange: '#ff6b00',
-              darkorange: '#cc4400',
-              neonorange: '#ff9500',
-              acid: '#39ff14',
-              fire: '#ff3300',
-              serum: '#00ff88',
-            }
-          },
-          fontFamily: {
-            runic: ['Cinzel Decorative', 'Uncial Antiqua', 'Papyrus', 'fantasy', 'serif'],
-            ancient: ['Cinzel', 'Cormorant Garamond', 'serif'],
-          }
-        }
-      }
-    }
-  </script>
-  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;500;600;700&family=Orbitron:wght@400;500;700;900&family=Exo+2:wght@300;400;600;700&display=swap" rel="stylesheet" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ordi Mutants | Bitcoin Ordinals</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/badges.css">
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cinzel:wght@400;500;700&family=Cormorant+Garamond:wght@400;500;600&display=swap');
+    * { margin: 0; padding: 0; box-sizing: border-box; }
     
     :root {
-      --ancient-black: #0a0908;
-      --ancient-dark: #0d0d0d;
-      --cult-orange: #ff6b00;
-      --cult-darkorange: #cc4400;
-      --cult-neonorange: #ff9500;
+      --bg-dark: #0a0908;
+      --bg-mid: #141210;
+      --bg-light: #1e1b18;
+      --text: #d4c5a9;
+      --text-dim: #8a7b65;
+      --accent: #8b4513;
+      --accent-glow: #cd853f;
+      --rune: #4a3728;
+      --border: #2a231c;
     }
     
-    * {
-      scrollbar-width: thin;
-      scrollbar-color: var(--cult-orange) var(--ancient-black);
+    @keyframes flicker {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.8; }
+    }
+    
+    @keyframes glow {
+      0%, 100% { box-shadow: 0 0 205, 13310px rgba(, 63, 0.3); }
+      50% { box-shadow: 0 0 25px rgba(205, 133, 63, 0.6); }
+    }
+    
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-5px); }
     }
     
     body {
-      background-color: var(--ancient-black);
-      color: var(--cult-orange);
-      font-family: 'Rajdhani', 'Orbitron', sans-serif;
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      background: var(--bg-dark);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
     }
     
-    /* Fixed Background */
-    .fixed-bg {
+    /* Background */
+    body::before {
+      content: '';
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: -1;
-      background-image: url('background.jpg');
-      background-size: cover;
-      background-position: center;
-      opacity: 0.08;
-    }
-    
-    /* Sharp Sci-Fi Font Style */
-    .runic-title {
-      font-family: 'Rajdhani', 'Orbitron', sans-serif;
-      font-weight: 700;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      font-size: 1.5rem;
-    }
-    
-    /* Texture overlay */
-    .texture-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: -1;
-      background: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
-      opacity: 0.03;
+      inset: 0;
+      background: 
+        radial-gradient(ellipse at 20% 20%, rgba(139, 69, 19, 0.1) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 80%, rgba(74, 55, 40, 0.15) 0%, transparent 50%),
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100'%3E%3Cpath d='M50 10 L60 40 L90 40 L65 60 L75 90 L50 70 L25 90 L35 60 L10 40 L40 40 Z' fill='none' stroke='%232a231c' stroke-width='0.5' opacity='0.3'/%3E%3C/svg%3E");
+      opacity: 0.4;
       pointer-events: none;
+      z-index: -1;
     }
     
-    /* Sticky Header with ORDI MUTANTS */
-    .sticky-header {
+    /* ===== GATEWAY ===== */
+    #gateway {
       position: fixed;
+      inset: 0;
+      background: var(--bg-dark);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+    
+    #gateway.hidden { display: none; }
+    
+    .gateway-content {
+      text-align: center;
+    }
+    
+    .rune-symbol {
+      font-size: 4rem;
+      color: var(--accent-glow);
+      animation: flicker 3s ease-in-out infinite;
+      margin-bottom: 1rem;
+      text-shadow: 0 0 20px rgba(205, 133, 63, 0.5);
+    }
+    
+    .gateway-title {
+      font-family: 'Cinzel', serif;
+      font-size: 2.5rem;
+      font-weight: 700;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+      color: var(--text);
+    }
+    
+    .gateway-subtitle {
+      font-size: 1rem;
+      color: var(--text-dim);
+      letter-spacing: 0.2em;
+      margin-bottom: 3rem;
+    }
+    
+    .gateway-buttons {
+      display: flex;
+      gap: 2rem;
+      justify-content: center;
+    }
+    
+    .gateway-btn {
+      font-family: 'Cinzel', serif;
+      font-size: 1.1rem;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      padding: 1rem 2.5rem;
+      border: 2px solid var(--border);
+      background: transparent;
+      color: var(--text);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      border-radius: 12px;
+    }
+    
+    .gateway-btn:hover {
+      border-color: var(--accent);
+      transform: translateY(-2px);
+    }
+    
+    .gateway-btn.burn {
+      border-color: #4a1a1a;
+    }
+    
+    .gateway-btn.burn:hover {
+      border-color: #8b0000;
+      box-shadow: 0 0 20px rgba(139, 0, 0, 0.3);
+    }
+    
+    .vial-icon {
+      width: 20px;
+      height: 24px;
+      background: linear-gradient(180deg, #4a3728 0%, #8b4513 50%, #2a1810 100%);
+      border-radius: 3px 3px 8px 8px;
+      position: relative;
+      border: 1px solid var(--accent-glow);
+    }
+    
+    .vial-icon::before {
+      content: '';
+      position: absolute;
+      top: 4px;
+      left: 4px;
+      right: 4px;
+      bottom: 6px;
+      background: linear-gradient(180deg, #9b59b6 0%, #8e44ad 50%, #6c3483 100%);
+      border-radius: 2px 2px 6px 6px;
+      animation: glow 2s ease-in-out infinite;
+    }
+    
+    .error-message {
+      margin-top: 2rem;
+      color: #8b0000;
+      font-size: 1rem;
+      letter-spacing: 0.1em;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    
+    .error-message.show {
+      opacity: 1;
+      animation: flicker 1s ease-in-out infinite;
+    }
+    
+    /* ===== MAIN CONTENT ===== */
+    #main-content { display: none; }
+    #main-content.visible { display: block; }
+    
+    /* Header */
+    header {
+      padding: 1.5rem 2rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(10, 9, 8, 0.9);
+      position: sticky;
       top: 0;
-      left: 0;
-      right: 0;
       z-index: 100;
-      background: linear-gradient(to bottom, rgba(10,9,8,0.98), rgba(10,9,8,0.85));
-      border-bottom: 1px solid rgba(155,48,255,0.4);
       backdrop-filter: blur(10px);
     }
     
-    .runic-text {
-      font-family: 'Metal Mania', 'Metamorphous', cursive;
-      font-weight: 400;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
+    .logo {
+      font-family: 'Cinzel', serif;
+      font-size: 1.2rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      color: var(--accent-glow);
     }
     
-    .ancient-text {
-      font-family: 'Metal Mania', 'Metamorphous', cursive;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-    }
-    
-    /* Purple Neon Button Styles */
-    .cult-btn {
-      background: linear-gradient(135deg, var(--ancient-dark), var(--ancient-black));
-      border: 2px solid var(--cult-orange);
-      color: var(--cult-orange);
-      transition: all 0.4s ease;
-      position: relative;
-      overflow: hidden;
-      font-family: 'Rajdhani', 'Orbitron', sans-serif;
-    }
-    
-    .cult-btn::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: -100%;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(155,48,255,0.3), transparent);
-      transition: 0.5s;
-    }
-    
-    .cult-btn:hover::before {
-      left: 100%;
-    }
-    
-    .cult-btn:hover {
-      background: var(--cult-orange);
-      color: var(--ancient-black);
-      box-shadow: 0 0 30px rgba(155,48,255,0.6);
-    }
-    
-    .cult-btn-acid {
-      border-color: #39ff14;
-      color: #39ff14;
-    }
-    
-    .cult-btn-acid:hover {
-      background: #39ff14;
-      color: var(--ancient-black);
-      box-shadow: 0 0 30px rgba(57,255,20,0.6);
-    }
-    
-    /* Section Styles */
-    section {
-      min-height: 100vh;
-      padding: 120px 20px 80px;
+    nav {
       display: flex;
-      flex-direction: column;
-      justify-content: center;
+      gap: 2rem;
     }
     
-    /* Ancient Border */
-    .ancient-border {
-      border: 1px solid rgba(155,48,255,0.4);
-      background: rgba(10,9,8,0.85);
-      position: relative;
+    nav a {
+      font-family: 'Cinzel', serif;
+      font-size: 0.8rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      text-decoration: none;
+      transition: color 0.2s;
     }
     
-    .ancient-border::before,
-    .ancient-border::after {
-      content: '🧪';
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      color: var(--cult-orange);
-      font-size: 1.5rem;
-      opacity: 0.7;
+    nav a:hover, nav a.active {
+      color: var(--text);
     }
     
-    .ancient-border::before { left: 10px; }
-    .ancient-border::after { right: 10px; }
+    /* Hero */
+    .hero {
+      padding: 6rem 2rem;
+      text-align: center;
+      background: linear-gradient(180deg, transparent 0%, rgba(20, 18, 16, 0.8) 100%);
+    }
     
-    /* Vile decorations */
-    .runic-divider {
+    .hero h1 {
+      font-family: 'Cinzel', serif;
+      font-size: 3rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      margin-bottom: 1rem;
+    }
+    
+    .hero p {
+      font-size: 1.2rem;
+      color: var(--text-dim);
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    
+    .rune-divider {
+      font-size: 2rem;
+      color: var(--accent);
+      margin: 2rem 0;
+      letter-spacing: 1em;
+    }
+    
+    /* Sections */
+    section {
+      padding: 4rem 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    
+    section h2 {
+      font-family: 'Cinzel', serif;
+      font-size: 2rem;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-align: center;
+      margin-bottom: 3rem;
+      color: var(--accent-glow);
+    }
+    
+    /* Collection Controls */
+    .collection-controls {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    
+    .sort-buttons {
+      display: flex;
+      gap: 0.5rem;
+    }
+    
+    .sort-btn {
+      background: var(--bg-light);
+      border: 1px solid var(--border);
+      color: var(--text-dim);
+      padding: 0.5rem 1rem;
+      font-family: 'Cinzel', serif;
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: all 0.3s;
+      border-radius: 8px;
+    }
+    
+    .sort-btn:hover {
+      border-color: var(--accent);
+      color: var(--text);
+    }
+    
+    .sort-btn.active {
+      background: var(--accent);
+      border-color: var(--accent-glow);
+      color: #fff;
+    }
+    
+    .collection-stats {
       display: flex;
       align-items: center;
-      justify-content: center;
       gap: 1rem;
-      color: rgba(155,48,255,0.5);
-      font-size: 1.5rem;
+      color: var(--text-dim);
+      font-size: 0.9rem;
     }
     
-    /* Glow effects - purple neon */
-    .glow-orange {
-      text-shadow: 0 0 10px rgba(155,48,255,0.8), 0 0 20px rgba(155,48,255,0.5), 0 0 40px rgba(155,48,255,0.3);
+    #show-all-btn {
+      background: transparent;
+      border: 1px solid var(--accent);
+      color: var(--accent-glow);
+      padding: 0.4rem 0.8rem;
+      font-family: 'Cinzel', serif;
+      font-size: 0.75rem;
+      cursor: pointer;
     }
     
-    /* NFT Grid */
-    .showcase-grid {
+    #show-all-btn:hover {
+      background: var(--accent);
+      color: #fff;
+    }
+    
+    .rarity-stats {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 1.5rem;
+      font-size: 0.9rem;
+    }
+    
+    .mutant-rank {
+      position: absolute;
+      top: 8px;
+      left: 8px;
+      font-size: 0.7rem;
+      color: var(--text-dim);
+      font-family: 'Cinzel', serif;
+    }
+    
+    .mutant-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.5rem;
+    }
+    
+    .sat-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      font-size: 0.75rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+      border: 2px solid rgba(255,255,255,0.4);
+      background-image: url('img/badges-spritesheet.jpg');
+      background-size: 400% 500%;
+      background-repeat: no-repeat;
+      background-position: center;
+    }
+    
+    /* Vintage - Golden clock (#2) */
+    .sat-badge[data-sat="Vintage"] { background-position: -25% 0%; }
+    /* Silk Road - Camel (#3) */
+    .sat-badge[data-sat="Silk Road"] { background-position: -50% 0%; }
+    /* Hitman - Red crosshair (#4) */
+    .sat-badge[data-sat="Hitman"] { background-position: -75% 0%; }
+    /* Pizza (#5) */
+    .sat-badge[data-sat="Pizza"] { background-position: -100% 0%; }
+    /* JPEG - Polaroid (#6) */
+    .sat-badge[data-sat="JPEG"] { background-position: 0% -25%; }
+    /* Nakamoto - Hooded (#8) */
+    .sat-badge[data-sat="Nakamoto"] { background-position: -50% -25%; }
+    /* Block 9 - White 9 (#10) */
+    .sat-badge[data-sat="Block 9"] { background-position: -100% -25%; filter: brightness(1.5); }
+    /* Block 286 - Gold 286 (#11) */
+    .sat-badge[data-sat="Block 286"] { background-position: 0% -50%; filter: sepia(1) saturate(2); }
+    /* Black Uncommon - Black diamond (#12) */
+    .sat-badge[data-sat="Black Uncommon"] { background-position: -25% -50%; filter: brightness(0.3); }
+    /* Palindrome - Rainbow butterfly (#15) */
+    .sat-badge[data-sat="Palindrome"] { background-position: -100% -50%; }
+    /* First Transaction - Triangle (#16) */
+    .sat-badge[data-sat="First Transaction"] { background-position: 0% -75%; }
+    /* Paliblock Palindrome - Black butterfly */
+    .sat-badge[data-sat="Paliblock Palindrome"] { background-position: -100% -50%; filter: brightness(0.2) saturate(0); }
+    /* Block 666 */
+    .sat-badge[data-sat="Block 666"] { background-position: -75% -25%; filter: hue-rotate(-20deg) saturate(2); }
+    /* Omega */
+    .sat-badge[data-sat="Omega"] { background-position: -50% -75%; }
+    /* Alpha */
+    .sat-badge[data-sat="Alpha"] { background-position: -25% -75%; }
+    /* Uncommon */
+    .sat-badge[data-sat="Uncommon"] { background-position: 0% -100%; filter: hue-rotate(80deg); }
+    /* Block 78 */
+    .sat-badge[data-sat="Block 78"] { background-position: -25% -100%; }
+    /* Block 9 450x */
+    .sat-badge[data-sat="Block 9 450x"] { background-position: -100% -25%; filter: brightness(2) drop-shadow(0 0 3px gold); }
+    /* Block 286 */
+    .sat-badge[data-sat="Block 286"] { background-position: 0% -50%; }
+    
+    .mutant-score {
+      font-size: 0.75rem;
+      color: var(--text-dim);
+      margin-top: 4px;
+    }
+    
+    .mutant-traits {
+      margin-top: 8px;
+      font-size: 0.65rem;
+      text-align: left;
+      padding: 6px;
+      background: rgba(0,0,0,0.2);
+      border-radius: 8px;
+    }
+    
+    /* Badge stack at bottom right of image */
+    .mutant-badges-bottom {
+      position: absolute;
+      bottom: 8px;
+      right: 8px;
+      z-index: 10;
+    }
+    
+    .sat-badge-stack {
+      position: relative;
+      display: inline-block;
+      cursor: pointer;
+    }
+    
+    .sat-badge-main {
+      border-radius: 6px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.5);
+      border: 2px solid rgba(255,255,255,0.3);
+    }
+    
+    .sat-badge-count {
+      position: absolute;
+      bottom: -4px;
+      right: -4px;
+      background: #ff6b00;
+      color: #fff;
+      font-size: 0.6rem;
+      font-weight: bold;
+      padding: 2px 5px;
+      border-radius: 10px;
+      border: 1px solid #fff;
+    }
+    
+    .sat-badge-single {
+      border-radius: 6px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.5);
+      border: 2px solid rgba(255,255,255,0.3);
+    }
+    
+    .sat-badge-popup {
+      display: none;
+      position: absolute;
+      bottom: 100%;
+      right: 0;
+      background: #1a1614;
+      border: 1px solid #ff6b00;
+      border-radius: 8px;
+      padding: 8px;
+      min-width: 150px;
+      z-index: 100;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+      margin-bottom: 8px;
+    }
+    
+    .sat-badge-stack:hover .sat-badge-popup {
+      display: block;
+    }
+    
+    .badge-popup-title {
+      font-size: 0.7rem;
+      color: #ff6b00;
+      margin-bottom: 6px;
+      text-align: center;
+      border-bottom: 1px solid #333;
+      padding-bottom: 4px;
+    }
+    
+    .badge-popup-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 4px;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      color: #d4c5a9;
+    }
+    
+    .badge-popup-item:hover {
+      background: rgba(255,107,0,0.1);
+    }
+    
+    .trait {
+      display: flex;
+      justify-content: space-between;
+      padding: 2px 0;
+    }
+    
+    .trait-type {
+      color: var(--text-dim);
+    }
+    
+    .trait-value {
+      color: var(--text);
+      font-weight: 500;
+    }
+    
+    .view-ordinals {
+      display: inline-block;
+      margin-top: 8px;
+      font-size: 0.7rem;
+      color: var(--accent-glow);
+      text-decoration: none;
+      border: 1px solid var(--accent);
+      padding: 4px 8px;
+      border-radius: 4px;
+      transition: all 0.3s;
+    }
+    
+    .view-ordinals:hover {
+      background: var(--accent);
+      color: #fff;
+    }
+    
+    .filter-btn {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text-dim);
+      padding: 0.4rem 0.8rem;
+      font-family: 'Cinzel', serif;
+      font-size: 0.75rem;
+      cursor: pointer;
+      transition: all 0.3s;
+      margin: 2px;
+    }
+    
+    .filter-btn:hover, .filter-btn.active {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fff;
+    }
+    
+    /* Collection Grid */
+    .collection-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
       gap: 1.5rem;
     }
     
-    .nft-card {
-      background: rgba(26,22,20,0.9);
-      border: 1px solid rgba(201,162,39,0.3);
-      border-radius: 4px;
-      overflow: hidden;
-      transition: all 0.4s ease;
+    .mutant-card {
+      background: var(--bg-mid);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1.5rem;
+      text-align: center;
+      transition: all 0.3s;
+      position: relative;
     }
     
-    .nft-card:hover {
-      border-color: var(--cult-orange);
-      transform: translateY(-5px);
-      box-shadow: 0 10px 40px rgba(155,48,255,0.3);
+    .mutant-card:hover {
+      border-color: var(--accent);
+      transform: translateY(-4px);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
     }
     
-    .nft-card .placeholder {
+    .mutant-image {
+      width: 100%;
       aspect-ratio: 1;
-      background: linear-gradient(135deg, #1a1614, #2a2420);
+      background: #000;
+      border-radius: 8px;
+      margin: 0 auto 1rem;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 3rem;
-    }
-    
-    /* Wallet button */
-    .wallet-btn {
-      background: linear-gradient(135deg, var(--cult-orange), var(--cult-darkorange));
-      border: 1px solid var(--cult-orange);
-      padding: 14px 28px;
-      font-family: 'Rajdhani', 'Orbitron', sans-serif;
-      font-weight: 400;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      letter-spacing: 0.1em;
-    }
-    
-    .wallet-btn:hover {
-      background: var(--cult-orange);
-      color: var(--ancient-black);
-      box-shadow: 0 0 25px rgba(155,48,255,0.6);
-    }
-    
-    /* Gateway Styles */
-    .gateway {
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      overflow: hidden;
       position: relative;
     }
     
-    .gateway.hidden {
-      display: none;
+    .mutant-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      image-rendering: pixelated;
     }
     
-    .enter-btn {
-      background: linear-gradient(135deg, var(--ancient-dark), var(--ancient-black));
-      border: 2px solid var(--cult-orange);
-      padding: 20px 50px;
-      font-family: 'Rajdhani', 'Orbitron', sans-serif;
-      font-size: 1.5rem;
-      font-weight: 400;
+    .mutant-name {
+      font-family: 'Cinzel', serif;
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+    
+    .mutant-inscription {
+      font-size: 0.75rem;
+      color: var(--text-dim);
+      font-family: monospace;
+    }
+    
+    /* Satoshi Table */
+    .satoshis-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    
+    .satoshis-table th,
+    .satoshis-table td {
+      padding: 1rem;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+    
+    .satoshis-table th {
+      font-family: 'Cinzel', serif;
+      font-size: 0.8rem;
       letter-spacing: 0.15em;
-      color: var(--cult-orange);
-      cursor: pointer;
-      transition: all 0.4s ease;
-      position: relative;
+      text-transform: uppercase;
+      color: var(--text-dim);
     }
     
-    .enter-btn:hover {
-      transform: scale(1.05);
+    .satoshis-table tr:hover {
+      background: var(--bg-mid);
     }
     
-    .enter-btn.mutate {
-      border-color: #39ff14;
-      color: #39ff14;
+    /* Rarities */
+    .rarity-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
     }
     
-    .enter-btn.mutate:hover {
-      background: #39ff14;
-      color: var(--ancient-black);
-      box-shadow: 0 0 40px rgba(57,255,20,0.6);
+    .rarity-item {
+      background: var(--bg-mid);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
     }
     
-    .enter-btn.burn {
-      border-color: #ff3300;
-      color: #ff3300;
+    .rarity-rank {
+      font-family: 'Cinzel', serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      width: 60px;
     }
     
-    .enter-btn.burn:hover {
-      background: #ff3300;
-      color: var(--ancient-black);
-      box-shadow: 0 0 40px rgba(57,255,20,0.6);
+    .rarity-rank.common { color: #8a8a8a; }
+    .rarity-rank.uncommon { color: #4ade80; }
+    .rarity-rank.rare { color: #60a5fa; }
+    .rarity-rank.epic { color: #a78bfa; }
+    .rarity-rank.legendary { color: #fbbf24; }
+    
+    .rarity-info {
+      flex: 1;
     }
     
-    /* Floating animation */
-    @keyframes float {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-10px); }
+    .rarity-name {
+      font-family: 'Cinzel', serif;
+      font-size: 1.1rem;
+      font-weight: 600;
     }
     
-    .float-animation {
-      animation: float 4s ease-in-out infinite;
+    .rarity-count {
+      font-size: 0.85rem;
+      color: var(--text-dim);
     }
     
-    @keyframes pulse-glow {
-      0%, 100% { opacity: 0.6; }
-      50% { opacity: 1; }
-    }
-    
-    .pulse-glow {
-      animation: pulse-glow 3s ease-in-out infinite;
+    /* Footer */
+    footer {
+      padding: 2rem;
+      text-align: center;
+      border-top: 1px solid var(--border);
+      color: var(--text-dim);
+      font-size: 0.85rem;
     }
   </style>
 </head>
 <body>
-
-  <!-- Fixed Backgrounds -->
-  <div class="fixed-bg"></div>
-  <div class="texture-overlay"></div>
-
-  <!-- STICKY HEADER -->
-  <header class="sticky-header">
-    <div class="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
-      <!-- Logo - Always at top -->
-      <div class="flex items-center gap-4">
-        <h1 class="runic-title text-xl md:text-2xl glow-orange">
-          ORDI-MUTANTS
-        </h1>
-      </div>
+  
+  <!-- Gateway -->
+  <div id="gateway">
+    <div class="gateway-content">
+      <div class="rune-symbol">ᚢ</div>
+      <h1 class="gateway-title">Mutate or Burn</h1>
+      <p class="gateway-subtitle">The choice determines your fate</p>
       
-      <!-- Navigation -->
-      <nav class="hidden md:flex items-center gap-8">
-        <a href="#about" class="runic-text text-sm tracking-widest hover:text-white transition">About</a>
-        <a href="#community" class="runic-text text-sm tracking-widest hover:text-white transition">Community</a>
-        <a href="#marketplace" class="runic-text text-sm tracking-widest hover:text-white transition">Marketplace</a>
-        <a href="#showcase" class="runic-text text-sm tracking-widest hover:text-white transition">Showcase</a>
-      </nav>
-      
-      <!-- Mobile menu button -->
-      <button id="mobile-menu-btn" class="md:hidden text-2xl" onclick="toggleMobileMenu()">
-        ☰
-      </button>
-    </div>
-    
-    <!-- Mobile Nav -->
-    <div id="mobile-nav" class="hidden md:hidden bg-ancient-dark border-t border-yellow-900/30 p-4">
-      <a href="#about" class="block py-2 ancient-text text-sm">About</a>
-      <a href="#community" class="block py-2 ancient-text text-sm">Community</a>
-      <a href="#marketplace" class="block py-2 ancient-text text-sm">Marketplace</a>
-      <a href="#showcase" class="block py-2 ancient-text text-sm">Showcase</a>
-    </div>
-  </header>
-
-  <!-- GATEWAY / DOORWAY -->
-  <div id="gateway" class="gateway">
-    <div class="text-center max-w-4xl mx-auto px-4">
-      <div class="float-animation mb-6">
-        <h1 class="runic-title text-5xl md:text-7xl lg:text-8xl glow-orange">
-          ORDI-MUTANTS
-        </h1>
-      </div>
-      
-      <p class="text-lg md:text-xl text-orange-400/70 mb-4 tracking-widest ancient-text">
-        INSCRIBED ON RARE SATOSHIS
-      </p>
-      
-      <div class="runic-divider my-8">
-        <span>🧪</span><span>🧪</span><span>🧪</span>
-      </div>
-      
-      <div class="flex flex-col md:flex-row gap-6 justify-center items-center">
-        <button onclick="enterSite('mutate')" class="enter-btn mutate">
-          🧪 MUTATE
-        </button>
-        <button onclick="enterSite('burn')" class="enter-btn burn">
+      <div class="gateway-buttons">
+        <button class="gateway-btn burn" onclick="burn()">
           🔥 BURN
         </button>
+        <button class="gateway-btn mutate" onclick="mutate()">
+          <span class="vial-icon"></span>
+          MUTATE
+        </button>
       </div>
       
-      <p class="mt-12 text-yellow-700/50 text-sm ancient-text tracking-widest">
-        ⚔ CHOOSE YOUR FATE ⚔
-      </p>
+      <p id="error-msg" class="error-message">Only the mutated may enter</p>
     </div>
   </div>
-
-  <!-- MAIN CONTENT -->
-  <div id="main-content" class="hidden">
+  
+  <!-- Main Content -->
+  <div id="main-content">
+    <header>
+      <div class="logo">ORDI MUTANTS</div>
+      <nav>
+        <a href="#collection" class="active">Collection</a>
+        <a href="#satoshis">Satoshis</a>
+        <a href="#rarities">Rarities</a>
+      </nav>
+    </header>
     
-    <!-- ABOUT SECTION -->
-    <section id="about">
-      <div class="max-w-4xl mx-auto w-full">
-        <div class="text-center mb-12">
-          <div class="runic-divider justify-center mb-6">
-            <span>᛫</span><span>᛫</span><span>᛫</span>
-          </div>
-          <h2 class="runic-title text-4xl md:text-5xl glow-orange mb-4">ABOUT</h2>
-          <div class="runic-divider justify-center">
-            <span>᛫</span><span>᛫</span><span>᛫</span>
+    <div class="hero">
+      <h1>ORDI MUTANTS</h1>
+      <p>Ancient inscriptions from the depths of Bitcoin. Ordinals etched in time.</p>
+      <div class="rune-divider">ᛟ ᚢ ᛞ ᛁ ᚱ ᚢ ᛚ ᛊ</div>
+    </div>
+    
+    <!-- Collection -->
+    <section id="collection">
+      <h2>⚗️ The Collection</h2>
+      
+      <div class="collection-controls">
+        <div class="sort-buttons">
+          <button class="sort-btn active" data-sort="rank" onclick="setSort('rank')">By Rank</button>
+          <button class="sort-btn" data-sort="rarity" onclick="setSort('rarity')">By Rarity</button>
+          <button class="sort-btn" data-sort="number" onclick="setSort('number')">By Number</button>
+          <button class="sort-btn" data-sort="score" onclick="setSort('score')">By Score</button>
+        </div>
+        <div class="collection-stats">
+          <span id="collection-count">Loading...</span>
+          <button id="show-all-btn" onclick="toggleShowAll()">Show All</button>
+        </div>
+      </div>
+      
+      <div class="rarity-stats" id="rarity-stats"></div>
+      
+      <div class="collection-grid" id="collection-grid"></div>
+    </section>
+    
+    <!-- Satoshis -->
+    <section id="satoshis">
+      <h2>Satoshi Range</h2>
+      <table class="satoshis-table">
+        <thead>
+          <tr>
+            <th>Range</th>
+            <th>Start</th>
+            <th>End</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Genesis</td>
+            <td>0</td>
+            <td>9,999</td>
+            <td>Inscribed</td>
+          </tr>
+          <tr>
+            <td>Ancient</td>
+            <td>10,000</td>
+            <td>49,999</td>
+            <td>Inscribed</td>
+          </tr>
+          <tr>
+            <td>Rare</td>
+            <td>50,000</td>
+            <td>99,999</td>
+            <td>Available</td>
+          </tr>
+          <tr>
+            <td>Common</td>
+            <td>100,000</td>
+            <td>1,000,000</td>
+            <td>Available</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+    
+    <!-- Rarities -->
+    <section id="rarities">
+      <h2>Rarity Tiers</h2>
+      <div class="rarity-list">
+        <div class="rarity-item">
+          <div class="rarity-rank common">I</div>
+          <div class="rarity-info">
+            <div class="rarity-name">Common Mutant</div>
+            <div class="rarity-count">8,000 inscriptions</div>
           </div>
         </div>
-        
-        <div class="ancient-border rounded-lg p-8 md:p-12">
-          <h3 class="ancient-text text-2xl text-white mb-4 text-center">THE COLLECTION</h3>
-          <p class="text-orange-200/80 leading-relaxed text-lg mb-8 text-center max-w-2xl mx-auto">
-            Ordi Mutants is an ancient collection inscribed upon the sacred Rare Satoshis — the most elusive and powerful units of Bitcoin. Each mutant bears unique traits forged through the mutation process, permanently etched into the blockchain's eternal ledger.
-          </p>
-          
-          <h3 class="ancient-text text-2xl text-white mb-4 text-center">THE FOUNDER & CRAFTSMEN</h3>
-          <p class="text-orange-200/80 leading-relaxed text-lg mb-8 text-center max-w-2xl mx-auto">
-            Conceived by ancient order of Bitcoin maximalists and digital artisans. We are the guardians of ordinal theory, inscribing our creations into the bedrock of digital permanence.
-          </p>
-          
-          <h3 class="ancient-text text-2xl text-white mb-4 text-center">BITCOIN & THE RARE Satoshis</h3>
-          <p class="text-orange-200/80 leading-relaxed text-lg text-center max-w-2xl mx-auto">
-            While mortals trade common sats, the Rare Satoshis from the first blocks hold power beyond measure. Our mutants live forever — inscribed in blood, bound to the chain.
-          </p>
+        <div class="rarity-item">
+          <div class="rarity-rank uncommon">II</div>
+          <div class="rarity-info">
+            <div class="rarity-name">Uncommon Mutant</div>
+            <div class="rarity-count">1,500 inscriptions</div>
+          </div>
         </div>
-        
-        <!-- Stats -->
-        <div class="grid grid-cols-3 gap-4 mt-8">
-          <div class="ancient-border rounded-lg p-6 text-center">
-            <div class="runic-text text-3xl md:text-4xl glow-orange">1,000</div>
-            <div class="ancient-text text-xs tracking-widest mt-2 text-orange-500/60">SACRED SUPPLY</div>
+        <div class="rarity-item">
+          <div class="rarity-rank rare">III</div>
+          <div class="rarity-info">
+            <div class="rarity-name">Rare Mutant</div>
+            <div class="rarity-count">350 inscriptions</div>
           </div>
-          <div class="ancient-border rounded-lg p-6 text-center">
-            <div class="runic-text text-3xl md:text-4xl glow-orange">100%</div>
-            <div class="ancient-text text-xs tracking-widest mt-2 text-orange-500/60">RARE SATS</div>
+        </div>
+        <div class="rarity-item">
+          <div class="rarity-rank epic">IV</div>
+          <div class="rarity-info">
+            <div class="rarity-name">Epic Mutant</div>
+            <div class="rarity-count">100 inscriptions</div>
           </div>
-          <div class="ancient-border rounded-lg p-6 text-center">
-            <div class="runic-text text-3xl md:text-4xl">∞</div>
-            <div class="ancient-text text-xs tracking-widest mt-2 text-orange-500/60">ETERNAL</div>
+        </div>
+        <div class="rarity-item">
+          <div class="rarity-rank legendary">V</div>
+          <div class="rarity-info">
+            <div class="rarity-name">Legendary Mutant</div>
+            <div class="rarity-count">50 inscriptions</div>
           </div>
         </div>
       </div>
     </section>
-
-    <!-- COMMUNITY SECTION -->
-    <section id="community">
-      <div class="max-w-5xl mx-auto w-full">
-        <div class="text-center mb-12">
-          <div class="runic-divider justify-center mb-6">
-            <span>🧪</span><span>🧪</span><span>🧪</span>
-          </div>
-          <h2 class="runic-title text-4xl md:text-5xl glow-orange mb-4">COMMUNITY</h2>
-          <div class="runic-divider justify-center">
-            <span>🧪</span><span>🧪</span><span>🧪</span>
-          </div>
-        </div>
-        
-        <!-- Spaces -->
-        <div class="ancient-border rounded-lg p-8 mb-8">
-          <h3 class="runic-title text-2xl glow-orange mb-6 text-center">SPACES</h3>
-          <div class="grid md:grid-cols-2 gap-4">
-            <div class="bg-ancient-dark/50 rounded-lg p-4 text-center border border-orange-900/30">
-              <div class="text-3xl mb-2">📡</div>
-              <div class="text-orange-400 font-bold">X / Twitter</div>
-              <div class="text-orange-600/60 text-sm">@ordimutants</div>
-            </div>
-            <div class="bg-ancient-dark/50 rounded-lg p-4 text-center border border-orange-900/30">
-              <div class="text-3xl mb-2">💬</div>
-              <div class="text-orange-400 font-bold">Discord</div>
-              <div class="text-orange-600/60 text-sm">Join the cult</div>
-            </div>
-          </div>
-        </div>
-        
-        <!-- IRL Events -->
-        <div class="ancient-border rounded-lg p-8 mb-8">
-          <h3 class="runic-title text-2xl glow-orange mb-6 text-center">IRL EVENTS</h3>
-          <div class="space-y-4">
-            <div class="bg-ancient-dark/50 rounded-lg p-4 border border-orange-900/30 flex justify-between items-center">
-              <div>
-                <div class="text-orange-400 font-bold">Bitcoin Nashville 2026</div>
-                <div class="text-orange-600/60 text-sm">June 2026 • Nashville, TN</div>
-              </div>
-              <div class="text-orange-500">📍</div>
-            </div>
-            <div class="bg-ancient-dark/50 rounded-lg p-4 border border-orange-900/30 flex justify-between items-center">
-              <div>
-                <div class="text-orange-400 font-bold">Ordinals Summit</div>
-                <div class="text-orange-600/60 text-sm">TBD • TBD</div>
-              </div>
-              <div class="text-orange-500">📍</div>
-            </div>
-          </div>
-        </div>
-        
-        <!-- Merch -->
-        <div class="ancient-border rounded-lg p-8">
-          <h3 class="runic-title text-2xl glow-orange mb-6 text-center">MERCH</h3>
-          <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <div class="bg-ancient-dark/50 rounded-lg p-4 text-center border border-orange-900/30">
-              <div class="aspect-square bg-gradient-to-br from-orange-900/30 to-orange-800/10 rounded mb-3 flex items-center justify-center text-3xl">👕</div>
-              <div class="text-orange-400 font-bold">T-Shirt</div>
-              <div class="text-orange-600/60 text-sm">$25</div>
-            </div>
-            <div class="bg-ancient-dark/50 rounded-lg p-4 text-center border border-orange-900/30">
-              <div class="aspect-square bg-gradient-to-br from-orange-900/30 to-orange-800/10 rounded mb-3 flex items-center justify-center text-3xl">🧢</div>
-              <div class="text-orange-400 font-bold">Cap</div>
-              <div class="text-orange-600/60 text-sm">$30</div>
-            </div>
-            <div class="bg-ancient-dark/50 rounded-lg p-4 text-center border border-orange-900/30">
-              <div class="aspect-square bg-gradient-to-br from-orange-900/30 to-orange-800/10 rounded mb-3 flex items-center justify-center text-3xl">👕</div>
-              <div class="text-orange-400 font-bold">Hoodie</div>
-              <div class="text-orange-600/60 text-sm">$55</div>
-            </div>
-            <div class="bg-ancient-dark/50 rounded-lg p-4 text-center border border-orange-900/30">
-              <div class="aspect-square bg-gradient-to-br from-orange-900/30 to-orange-800/10 rounded mb-3 flex items-center justify-center text-3xl">🧪</div>
-              <div class="text-orange-400 font-bold">Sticker Pack</div>
-              <div class="text-orange-600/60 text-sm">$10</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- MARKETPLACE SECTION -->
-    <section id="marketplace">
-      <div class="max-w-5xl mx-auto w-full">
-        <div class="text-center mb-12">
-          <div class="runic-divider justify-center mb-6">
-            <span>᛫</span><span>᛫</span><span>᛫</span>
-          </div>
-          <h2 class="runic-title text-4xl md:text-5xl glow-orange mb-4">MARKETPLACE</h2>
-          <div class="runic-divider justify-center">
-            <span>᛫</span><span>᛫</span><span>᛫</span>
-          </div>
-        </div>
-        
-        <div class="ancient-border rounded-lg p-8 md:p-12">
-          <p class="text-orange-200/80 text-center mb-8 text-lg">
-            Acquire and trade Ordi Mutants through the ancient marketplaces of the realm.
-          </p>
-          
-          <div class="flex flex-col md:flex-row gap-4 justify-center mb-10">
-            <a href="https://ord-dropz.xyz/secondary/collections/ordimutants" target="_blank" class="cult-btn px-8 py-4 rounded text-center ancient-text tracking-widest">
-              ENTER ORD DROPZ
-            </a>
-            <a href="https://ordinalsbot.com" target="_blank" class="cult-btn cult-btn-acid px-8 py-4 rounded text-center ancient-text tracking-widest">
-              INSCRIBE NEW
-            </a>
-          </div>
-          
-          <!-- Featured -->
-          <div class="mt-10">
-            <h3 class="ancient-text text-center text-xl mb-6 tracking-widest">FEATURED OFFERINGS</h3>
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <div class="bg-ancient-dark/50 rounded p-4 text-center border border-orange-900/30">
-                <div class="aspect-square bg-gradient-to-br from-orange-900/30 to-orange-800/10 rounded mb-3 flex items-center justify-center overflow-hidden">
-                  <img src="background.jpg" alt="Ordi Mutant" class="w-full h-full object-cover opacity-80" />
-                </div>
-                <div class="text-orange-400 font-bold">#042</div>
-                <div class="text-orange-600/60 text-sm">0.05 BTC</div>
-              </div>
-              <div class="bg-ancient-dark/50 rounded p-4 text-center border border-orange-900/30">
-                <div class="aspect-square bg-gradient-to-br from-orange-900/30 to-orange-800/10 rounded mb-3 flex items-center justify-center overflow-hidden">
-                  <img src="background.jpg" alt="Ordi Mutant" class="w-full h-full object-cover opacity-80" />
-                </div>
-                <div class="text-orange-400 font-bold">#087</div>
-                <div class="text-orange-600/60 text-sm">0.08 BTC</div>
-              </div>
-              <div class="bg-ancient-dark/50 rounded p-4 text-center border border-orange-900/30">
-                <div class="aspect-square bg-gradient-to-br from-orange-900/30 to-orange-800/10 rounded mb-3 flex items-center justify-center overflow-hidden">
-                  <img src="background.jpg" alt="Ordi Mutant" class="w-full h-full object-cover opacity-80" />
-                </div>
-                <div class="text-orange-400 font-bold">#123</div>
-                <div class="text-orange-600/60 text-sm">0.06 BTC</div>
-              </div>
-              <div class="bg-ancient-dark/50 rounded p-4 text-center border border-orange-900/30">
-                <div class="aspect-square bg-gradient-to-br from-orange-900/30 to-orange-800/10 rounded mb-3 flex items-center justify-center overflow-hidden">
-                  <img src="background.jpg" alt="Ordi Mutant" class="w-full h-full object-cover opacity-80" />
-                </div>
-                <div class="text-orange-400 font-bold">#256</div>
-                <div class="text-orange-600/60 text-sm">0.12 BTC</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- SHOWCASE SECTION -->
-    <section id="showcase">
-      <div class="max-w-6xl mx-auto w-full">
-        <div class="text-center mb-12">
-          <div class="runic-divider justify-center mb-6">
-            <span>᛫</span><span>᛫</span><span>᛫</span>
-          </div>
-          <h2 class="runic-title text-4xl md:text-5xl glow-orange mb-4">SHOWCASE</h2>
-          <div class="runic-divider justify-center">
-            <span>᛫</span><span>᛫</span><span>᛫</span>
-          </div>
-        </div>
-        
-        <!-- Wallet Connection Prompt -->
-        <div id="wallet-prompt" class="ancient-border rounded-lg p-12 text-center">
-          <div class="text-6xl mb-6">⚔</div>
-          <h3 class="runic-text text-2xl mb-4">CONNECT YOUR WALLET</h3>
-          <p class="text-orange-300/60 mb-8 max-w-md mx-auto">
-            Reveal your mutants. Connect your Xverse wallet to display your sacred collection.
-          </p>
-          <button onclick="connectWallet()" class="wallet-btn rounded">
-            CONNECT XVENSE
-          </button>
-        </div>
-        
-        <!-- Connected Wallet Display -->
-        <div id="wallet-display" class="hidden">
-          <div class="flex justify-between items-center mb-8">
-            <div>
-              <span class="text-yellow-700/60 ancient-text text-sm tracking-widest">CONNECTED:</span>
-              <span id="wallet-address" class="text-orange-400 font-mono ml-2"></span>
-            </div>
-            <button onclick="disconnectWallet()" class="text-yellow-700/60 hover:text-white text-sm ancient-text tracking-widest">
-              [DISCONNECT]
-            </button>
-          </div>
-          
-          <div id="nft-showcase" class="showcase-grid">
-            <!-- NFTs populated here -->
-          </div>
-          
-          <div id="no-mutants" class="hidden text-center py-16">
-            <div class="text-6xl mb-4">🧪</div>
-            <p class="text-orange-300/60 mb-4">No mutants found in your vault.</p>
-            <a href="#marketplace" class="text-orange-400 hover:text-white ancient-text tracking-widest">
-              [ SEEK YOUR MUTANT ] →
-            </a>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- FOOTER -->
-    <footer class="py-10 border-t border-yellow-900/30 mt-20">
-      <div class="max-w-7xl mx-auto px-4 text-center">
-        <div class="runic-divider justify-center mb-6">
-          <span>᛫</span><span>᛫</span><span>᛫</span>
-        </div>
-        <p class="text-yellow-700/50 ancient-text tracking-widest text-sm">
-          © 2026 ORDI MUTANTS — INSCRIBED IN BLOOD, BOUND TO THE CHAIN
-        </p>
-        <p class="text-yellow-800/30 text-xs mt-2">
-          🧪 🧪 🧪
-        </p>
-      </div>
+    
+    <footer>
+      <p>Ordi Mutants — Inscribed on Bitcoin</p>
+      <p style="margin-top: 0.5rem; font-size: 0.75rem;">ᚠ ᚢ ᚦ ᚨ ᚱ ᚲ ᚷ ᚹ ᚺ ᚾ ᛁ ᛃ ᛈ ᛇ ᛉ ᛊ</p>
     </footer>
   </div>
-
+  
+  <script src="js/collection.js"></script>
   <script>
-    let walletConnected = false;
+    function burn() {
+      const errorMsg = document.getElementById('error-msg');
+      errorMsg.classList.add('show');
+      setTimeout(() => {
+        errorMsg.classList.remove('show');
+      }, 3000);
+    }
     
-    function enterSite(choice) {
-      if (choice === 'burn') {
-        // Reject burn - show error or redirect
-        document.getElementById('gateway').innerHTML = `
-          <div class="text-center">
-            <div class="text-6xl mb-6">🔥</div>
-            <h2 class="runic-title text-4xl glow-orange mb-4">ACCESS DENIED</h2>
-            <p class="text-orange-300 mb-8">Only the mutated may enter.</p>
-            <button onclick="location.reload()" class="enter-btn mutate">
-              🧪 TRY AGAIN
-            </button>
-          </div>
-        `;
-        return;
-      }
-      // Only mutate allows entry
+    function mutate() {
       document.getElementById('gateway').classList.add('hidden');
-      document.getElementById('main-content').classList.remove('hidden');
+      document.getElementById('main-content').classList.add('visible');
     }
     
-    function toggleMobileMenu() {
-      const nav = document.getElementById('mobile-nav');
-      nav.classList.toggle('hidden');
-    }
-    
-    function connectWallet() {
-      const addresses = [
-        'bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh',
-        'bc1qw508d6qejxtdg4y5r3zarvary0c5xw7kxpjzsx',
-      ];
-      
-      const randomAddress = addresses[Math.floor(Math.random() * addresses.length)];
-      const displayAddress = randomAddress.slice(0, 8) + '...' + randomAddress.slice(-6);
-      
-      walletConnected = true;
-      
-      document.getElementById('wallet-prompt').classList.add('hidden');
-      document.getElementById('wallet-display').classList.remove('hidden');
-      document.getElementById('wallet-address').textContent = displayAddress;
-      
-      displayMutants();
-    }
-    
-    function disconnectWallet() {
-      walletConnected = false;
-      
-      document.getElementById('wallet-prompt').classList.remove('hidden');
-      document.getElementById('wallet-display').classList.add('hidden');
-    }
-    
-    // Satribute rarity order (rarest first)
-    const SATURATE_RARITY = {
-      'Block 9 450x': 1,
-      'Alpha': 2,
-      'Omega': 3,
-      'Paliblock Palindrome': 4,
-      'Palindrome': 5,
-      'Block 666': 6,
-      'Block 286': 7,
-      'Block 78': 8,
-      'Block 9': 9,
-      'First Transaction': 10,
-      'Nakamoto': 11,
-      'Pizza': 12,
-      'Hitman': 13,
-      'Silk Road': 14,
-      'JPEG': 15,
-      'Vintage': 16,
-      'Black Uncommon': 17,
-      'Uncommon': 18,
-      'Common': 19
+    // Smooth scroll nav
+    document.querySelectorAll('nav a').forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const target = document.querySelector(link.getAttribute('href'));
+        target.scrollIntoView({ behavior: 'smooth' });
+        
+        document.querySelectorAll('nav a').forEach(l => l.classList.remove('active'));
+        link.classList.add('active');
+      });
+    });
+  </script>
+  
+  <!-- Debug Badge Verification -->
+  <div id="debug-badges" style="display:none; position:fixed; top:10px; right:10px; background:#222; padding:15px; border-radius:8px; z-index:9999; color:#fff; max-width:400px; font-size:12px;">
+    <h3 style="margin:0 0 10px 0; color:#fbbf24;">Badge Debug</h3>
+    <input type="text" id="debug-token-input" placeholder="Enter token ID (e.g. 4303)" style="width:150px; padding:5px; margin-right:5px;">
+    <button onclick="debugBadges()" style="padding:5px 10px; cursor:pointer;">Check</button>
+    <div id="debug-output" style="margin-top:10px; white-space:pre-wrap;"></div>
+    <div id="debug-stats" style="margin-top:10px; color:#888;"></div>
+    <button onclick="document.getElementById('debug-badges').style.display='none'" style="margin-top:10px;">Close</button>
+  </div>
+  
+  <script>
+    // Badge config for debug (duplicated from collection.js)
+    const satBadgeConfig = {
+      "Vintage": {"icon": "🕐", "color": "#fbbf24", "name": "Vintage"},
+      "Silk Road": {"icon": "🐪", "color": "#a0522d", "name": "Silk Road"},
+      "Hitman": {"icon": "🎯", "color": "#dc143c", "name": "Hitman"},
+      "Pizza": {"icon": "🍕", "color": "#ff6347", "name": "Pizza"},
+      "JPEG": {"icon": "📸", "color": "#ff69b4", "name": "JPEG"},
+      "Nakamoto": {"icon": "👤", "color": "#4a4a4a", "name": "Nakamoto"},
+      "Block 9": {"icon": "9️⃣", "color": "#ffffff", "name": "Block 9"},
+      "Block 286": {"icon": "286", "color": "#ffd700", "name": "Block 286"},
+      "Black Uncommon": {"icon": "⬛", "color": "#000000", "name": "Black Uncommon"},
+      "First Transaction": {"icon": "🔺", "color": "#8b4513", "name": "First Transaction"},
+      "Palindrome": {"icon": "🦋", "color": "#ff00ff", "name": "Palindrome"},
+      "Paliblock Palindrome": {"icon": "🦋⬛", "color": "#000000", "name": "Paliblock Palindrome"},
+      "Block 666": {"icon": "👹", "color": "#8b0000", "name": "Block 666"},
+      "Block 78": {"icon": "78", "color": "#9400d3", "name": "Block 78"},
+      "Omega": {"icon": "Ω", "color": "#00ff00", "name": "Omega"},
+      "Alpha": {"icon": "Α", "color": "#00ffff", "name": "Alpha"},
+      "Uncommon": {"icon": "◆", "color": "#228b22", "name": "Uncommon"},
+      "Block 9 450x": {"icon": "9💎", "color": "#ff1493", "name": "Block 9 450x"},
+      "Common": {"icon": "🔹", "color": "#6b7280", "name": "Common"}
     };
     
-    // Load satributes data (new format: keyed by inscription ID)
-    let satributesData = {};
-    let satData = {}; // For sat number
-    fetch('data/satributes.json')
-      .then(res => res.json())
-      .then(data => {
-        // New format: { inscriptionId: { satributes: [...], sat: number, name: "ORDIMUTANT #123" } }
-        Object.entries(data).forEach(([insId, info]) => {
-          // Extract mutant number from name like "ORDIMUTANT #2970"
-          const match = info.name && info.name.match(/#(\d+)/);
-          if (match) {
-            const mutantNum = parseInt(match[1]);
-            satributesData[mutantNum] = info.satributes || [];
-            satData[mutantNum] = info.sat;
-          }
-        });
-        console.log('Loaded satributes for', Object.keys(satributesData).length, 'mutants');
-      })
-      .catch(e => console.error('Failed to load satributes:', e));
+    const slugToKey = {
+      'vintage': 'Vintage',
+      'silk_road': 'Silk Road',
+      'hitman': 'Hitman',
+      'pizza': 'Pizza',
+      'jpeg': 'JPEG',
+      'nakamoto': 'Nakamoto',
+      'block_9': 'Block 9',
+      'block_286': 'Block 286',
+      'black_uncommon': 'Black Uncommon',
+      'first_transaction': 'First Transaction',
+      'palindrome': 'Palindrome',
+      'paliblock_palindrome': 'Paliblock Palindrome',
+      'block_666': 'Block 666',
+      'block_78': 'Block 78',
+      'omega': 'Omega',
+      'alpha': 'Alpha',
+      'uncommon': 'Uncommon',
+      'block_9_450x': 'Block 9 450x',
+      'common': 'Common'
+    };
     
-    function displayMutants() {
-      const grid = document.getElementById('nft-showcase');
-      const noMutants = document.getElementById('no-mutants');
-      
-      // Load actual mutants from metadata.json
-      let actualMutants = [];
-      fetch('data/metadata.json')
-        .then(res => res.json())
-        .then(data => {
-          actualMutants = data.map(m => {
-            const match = m.meta.name.match(/#(\d+)/);
-            const num = match ? parseInt(match[1]) : 0;
-            return {
-              id: '#' + num,
-              name: m.meta.name,
-              traits: m.meta.attributes?.find(a => a.trait_type === 'DNA')?.value || 'UNKNOWN',
-              mutantNum: num
-            };
-          });
-          console.log('Loaded', actualMutants.length, 'mutants from metadata');
-          renderMutants(actualMutants);
-        })
-        .catch(e => {
-          console.error('Failed to load metadata:', e);
-          renderMutants([]);
+    // Debug function to check badges
+    let mutantBadgesDebug = {};
+    
+    fetch('data/mutant_badges.json')
+      .then(r => r.json())
+      .then(data => {
+        mutantBadgesDebug = data;
+        // Stats
+        const total = Object.keys(data).length;
+        const withBadges = Object.values(data).filter(b => b.length > 0).length;
+        const badgeCounts = {};
+        Object.values(data).forEach(badges => {
+          badges.forEach(b => { badgeCounts[b] = (badgeCounts[b] || 0) + 1; });
         });
-      
-      function renderMutants(mutants) {
-        if (mutants.length === 0) {
-          grid.innerHTML = '';
-          noMutants.classList.remove('hidden');
-          return;
-        }
-
-        noMutants.classList.add('hidden');
-        grid.innerHTML = mutants.map(m => {
-      
-      // Get satribute badge HTML
-      function getSatributeBadges(mutantNum) {
-        const satributes = satributesData[mutantNum];
-        if (!satributes || satributes.length === 0) return '';
-        
-        // Sort by rarity (rarest first)
-        const sorted = [...satributes].sort((a, b) => (SATURATE_RARITY[a] || 99) - (SATURATE_RARITY[b] || 99));
-        
-        // Also get sat number if available
-        const satNum = satData[mutantNum];
-        const satNumDisplay = satNum ? `<span class="text-xs mt-1 mr-1 inline-block px-2 py-0.5 rounded bg-blue-900/40 text-blue-400 border border-blue-700/40">sat: ${satNum}</span>` : '';
-        
-        return satNumDisplay + sorted.map(s => 
-          `<span class="text-xs mt-1 mr-1 inline-block px-2 py-0.5 rounded bg-orange-900/40 text-orange-400 border border-orange-700/40">${s}</span>`
-        ).join('');
-      }
-      
-      function renderMutants(mutants) {
-        if (mutants.length === 0) {
-          grid.innerHTML = '';
-          noMutants.classList.remove('hidden');
-          return;
-        }
-
-        noMutants.classList.add('hidden');
-        grid.innerHTML = mutants.map(m => {
-          // Use mutantNum if available, otherwise extract from id
-          const num = m.mutantNum !== undefined ? m.mutantNum : parseInt(m.id.replace('#', ''));
-          const satBadges = getSatributeBadges(num);
-          
-          return `
-          <div class="nft-card">
-            <div class="placeholder">🧪</div>
-            <div class="p-4 text-center">
-              <div class="text-orange-400 font-bold ancient-text">ORDI MUTANT ${m.id}</div>
-              <div class="text-yellow-700/60 text-xs tracking-widest ancient-text">${m.traits}</div>
-              ${satBadges}
-            </div>
-          </div>
-        `}).join('');
+        const topBadges = Object.entries(badgeCounts).sort((a,b) => b[1]-a[1]).slice(0,10);
+        document.getElementById('debug-stats').innerHTML = 
+          'Total tokens: ' + total + '<br>' +
+          'With badges: ' + withBadges + '<br>' +
+          'Top badges: ' + topBadges.map(b => b[0] + '=' + b[1]).join(', ');
+      });
+    
+    function debugBadges() {
+      const input = document.getElementById('debug-token-input').value;
+      const output = document.getElementById('debug-output');
+      const badges = mutantBadgesDebug[input];
+      if (badges) {
+        output.innerHTML = 'Token ' + input + ' has ' + badges.length + ' badge(s):\n' + 
+          badges.map(b => '  - ' + b + ' (' + (satBadgeConfig[slugToKey[b]]?.icon || '?') + ')').join('\n');
+      } else {
+        output.innerHTML = 'Token ' + input + ' not found or has no badges';
       }
     }
+    
+    // Enable debug with ?debug=true URL param
+    if (window.location.search.includes('debug=true')) {
+      document.getElementById('debug-badges').style.display = 'block';
+    }
+  </script>
 </body>
 </html>

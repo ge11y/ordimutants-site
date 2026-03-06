@@ -115,13 +115,6 @@ function sortMutants(mutants, sortBy) {
       if (rarityA !== rarityB) return rarityA - rarityB;
       return b.rarityScore - a.rarityScore;
     });
-    case 'rarity_asc': return sorted.sort((a, b) => {
-      // Sort from least rare (common) to most rare (mythic)
-      const rarityA = rarityConfig[a.status]?.sort || 999;
-      const rarityB = rarityConfig[b.status]?.sort || 999;
-      if (rarityA !== rarityB) return rarityB - rarityA; // reversed!
-      return a.rarityScore - b.rarityScore;
-    });
     case 'number': return sorted.sort((a, b) => (a.number || 9999) - (b.number || 9999));
     case 'score': return sorted.sort((a, b) => b.rarityScore - a.rarityScore);
     default: return sorted;
@@ -178,6 +171,7 @@ function getRareSatBadge(mutantNumber) {
       ${allBadgesHtml}
     </div>
   </div>`;
+}
 }
 
 function renderCollection() {
@@ -248,20 +242,16 @@ function toggleShowAll() {
 }
 
 // Initialize
-console.log('Loading data...');
 Promise.all([
-  fetch('data/mutants.csv').then(r => { console.log('CSV loaded'); return r.text(); }),
-  fetch('data/metadata.json').then(r => { console.log('Metadata loaded'); return r.json(); }),
-  fetch('data/mutant_to_sat.json').then(r => { console.log('Sat map loaded'); return r.json(); }),
-  fetch('data/mutant_badges.json').then(r => { console.log('Badges loaded'); return r.json(); }).catch(e => { console.log('Badges error:', e); return ({}); })
+  fetch('data/mutants.csv').then(r => r.text()),
+  fetch('data/metadata.json').then(r => r.json()),
+  fetch('data/mutant_to_sat.json').then(r => r.json()),
+  fetch('data/mutant_badges.json').then(r => r.json()).catch(() => ({}))
 ]).then(([csv, meta, satMap, badges]) => {
-  console.log('All data loaded, parsing...');
   mutants = parseCSV(csv);
-  console.log('Parsed', mutants.length, 'mutants');
   meta.forEach(m => { metadata[m.id] = m; });
   mutantToSat = satMap;
   mutantBadges = badges;
-  console.log('Rendering...');
   renderCollection();
   
   // Stats
@@ -277,7 +267,4 @@ Promise.all([
   });
   statsHtml += `<button class="filter-btn all" data-filter="all" onclick="setFilter('all')" style="border-color: var(--text-dim)">All</button>`;
   document.getElementById('rarity-stats').innerHTML = statsHtml;
-}).catch(err => {
-  console.error('Error loading data:', err);
-  document.getElementById('collection-grid').innerHTML = '<div style="color:red;padding:2rem;text-align:center;">Error loading data: ' + err.message + '</div>';
 });
