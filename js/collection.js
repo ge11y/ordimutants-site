@@ -242,7 +242,8 @@ function toggleShowAll() {
 }
 
 // Initialize
-Promise.all([
+console.log("Loading collection data...");
+  Promise.all([
   fetch('data/mutants.csv').then(r => r.text()),
   fetch('data/metadata.json').then(r => r.json()),
   fetch('data/mutant_to_sat.json').then(r => r.json()),
