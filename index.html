@@ -551,6 +551,149 @@
       color: #fff;
     }
     
+    /* Search Box */
+    .search-box {
+      display: flex;
+      align-items: center;
+      background: var(--bg-mid);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.3rem 0.8rem;
+      margin-right: 1rem;
+    }
+    
+    .search-box input {
+      background: transparent;
+      border: none;
+      color: var(--text);
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1rem;
+      width: 250px;
+      outline: none;
+    }
+    
+    .search-box input::placeholder {
+      color: var(--text-dim);
+    }
+    
+    .search-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-dim);
+      cursor: pointer;
+      font-size: 1rem;
+      padding: 0 0.3rem;
+    }
+    
+    .search-btn:hover {
+      color: var(--text);
+    }
+    
+    /* Modal Viewer */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.9);
+      z-index: 2000;
+      justify-content: center;
+      align-items: center;
+      padding: 2rem;
+    }
+    
+    .modal-overlay.active {
+      display: flex;
+    }
+    
+    .modal-content {
+      background: var(--bg-mid);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      max-width: 600px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      position: relative;
+    }
+    
+    .modal-close {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: transparent;
+      border: none;
+      color: var(--text-dim);
+      font-size: 1.5rem;
+      cursor: pointer;
+      z-index: 10;
+    }
+    
+    .modal-close:hover {
+      color: var(--text);
+    }
+    
+    .modal-image {
+      width: 100%;
+      aspect-ratio: 1;
+      object-fit: contain;
+      background: var(--bg-dark);
+      border-radius: 8px 8px 0 0;
+    }
+    
+    .modal-details {
+      padding: 1.5rem;
+    }
+    
+    .modal-name {
+      font-family: 'Cinzel', serif;
+      font-size: 1.5rem;
+      color: var(--text);
+      margin-bottom: 0.5rem;
+    }
+    
+    .modal-inscription {
+      color: var(--text-dim);
+      font-size: 0.85rem;
+      word-break: break-all;
+      margin-bottom: 1rem;
+    }
+    
+    .modal-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+    
+    .modal-badge {
+      background: var(--rune);
+      color: var(--text);
+      padding: 0.3rem 0.8rem;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      border: 1px solid var(--border);
+    }
+    
+    .modal-links {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+    
+    .modal-links a {
+      background: var(--accent);
+      color: #fff;
+      padding: 0.6rem 1.2rem;
+      border-radius: 6px;
+      text-decoration: none;
+      font-size: 0.9rem;
+      transition: all 0.3s;
+    }
+    
+    .modal-links a:hover {
+      background: var(--accent-glow);
+    }
+    
     /* Collection Grid */
     .collection-grid {
       display: grid;
@@ -732,6 +875,10 @@
       <h2>⚗️ The Collection</h2>
       
       <div class="collection-controls">
+        <div class="search-box">
+          <input type="text" id="mutant-search" placeholder="Search by name, number, or inscription..." oninput="searchMutants(this.value)">
+          <button class="search-btn" onclick="clearSearch()">✕</button>
+        </div>
         <div class="sort-buttons">
           <button class="sort-btn active" data-sort="rank" onclick="setSort('rank')">By Rank</button>
           <button class="sort-btn" data-sort="rarity" onclick="setSort('rarity')">By Rarity</button>
@@ -959,6 +1106,190 @@
     if (window.location.search.includes('debug=true')) {
       document.getElementById('debug-badges').style.display = 'block';
     }
+    
+    // ===== SEARCH & VIEWER FUNCTIONALITY =====
+    let allMutantsData = [];
+    let searchQuery = '';
+    
+    // Load complete mutant data
+    fetch('data/mutants_complete.json')
+      .then(r => r.json())
+      .then(data => {
+        allMutantsData = Object.values(data);
+        console.log('Loaded ' + allMutantsData.length + ' mutants');
+      });
+    
+    // Badge config for display
+    const badgeDisplayConfig = {
+      'vintage': { icon: '🕐', label: 'Vintage', color: '#fbbf24' },
+      'silk_road': { icon: '🐪', label: 'Silk Road', color: '#a0522d' },
+      'hitman': { icon: '🎯', label: 'Hitman', color: '#dc143c' },
+      'pizza': { icon: '🍕', label: 'Pizza', color: '#ff6347' },
+      'jpeg': { icon: '📸', label: 'JPEG', color: '#ff69b4' },
+      'nakamoto': { icon: '👤', label: 'Nakamoto', color: '#4a4a4a' },
+      'block_9': { icon: '9️⃣', label: 'Block 9', color: '#ffffff' },
+      'block_286': { icon: '286', label: 'Block 286', color: '#ffd700' },
+      'black_uncommon': { icon: '⬛', label: 'Black Uncommon', color: '#000000' },
+      'first_transaction': { icon: '🔺', label: 'First Transaction', color: '#8b4513' },
+      'palindrome': { icon: '🦋', label: 'Palindrome', color: '#ff00ff' },
+      'paliblock_palindrome': { icon: '🦋⬛', label: 'Paliblock Palindrome', color: '#000000' },
+      'block_666': { icon: '👹', label: 'Block 666', color: '#8b0000' },
+      'block_78': { icon: '78', label: 'Block 78', color: '#9400d3' },
+      'omega': { icon: 'Ω', label: 'Omega', color: '#00ff00' },
+      'alpha': { icon: 'Α', label: 'Alpha', color: '#00ffff' },
+      'uncommon': { icon: '◆', label: 'Uncommon', color: '#228b22' },
+      'block_9_450x': { icon: '9💎', label: 'Block 9 450x', color: '#ff1493' },
+      'common': { icon: '🔹', label: 'Common', color: '#6b7280' }
+    };
+    
+    function searchMutants(query) {
+      searchQuery = query.toLowerCase().trim();
+      renderCollection();
+    }
+    
+    function clearSearch() {
+      document.getElementById('mutant-search').value = '';
+      searchQuery = '';
+      renderCollection();
+    }
+    
+    function getMutantById(inscriptionId) {
+      return allMutantsData.find(m => m.id === inscriptionId);
+    }
+    
+    function openMutantModal(inscriptionId) {
+      const mutant = getMutantById(inscriptionId);
+      if (!mutant) return;
+      
+      const modal = document.getElementById('mutant-modal');
+      const modalImg = document.getElementById('modal-image');
+      const modalName = document.getElementById('modal-name');
+      const modalInscription = document.getElementById('modal-inscription');
+      const modalBadges = document.getElementById('modal-badges');
+      const modalSat = document.getElementById('modal-sat');
+      
+      // Set image
+      modalImg.src = 'https://ordinals.com/content/' + inscriptionId;
+      modalImg.onerror = function() {
+        this.src = 'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect fill=%22%23111%22 width=%22100%22 height=%22100%22/><text x=%2250%22 y=%2255%22 text-anchor=%22middle%22 fill=%22%23fbbf24%22 font-size=%2240%22>⚗️</text></svg>';
+      };
+      
+      // Set details
+      modalName.textContent = mutant.name;
+      modalInscription.textContent = inscriptionId;
+      modalSat.textContent = 'Sat #: ' + (mutant.sat_number || 'N/A');
+      
+      // Set badges
+      let badgesHtml = '';
+      if (mutant.badges && mutant.badges.length > 0) {
+        mutant.badges.forEach(badge => {
+          const cfg = badgeDisplayConfig[badge] || { icon: '?', label: badge, color: '#666' };
+          badgesHtml += '<span class="modal-badge" style="border-color: ' + cfg.color + ';">' + cfg.icon + ' ' + cfg.label + '</span>';
+        });
+      } else {
+        badgesHtml = '<span class="modal-badge">No badges</span>';
+      }
+      modalBadges.innerHTML = badgesHtml;
+      
+      // Set links
+      document.getElementById('modal-ordinals-link').href = 'https://ordinals.com/inscription/' + inscriptionId;
+      document.getElementById('modal-magiceden-link').href = 'https://magiceden.us/ordinals/marketplace/ordimutants/' + inscriptionId;
+      
+      // Show modal
+      modal.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+    
+    function closeMutantModal() {
+      const modal = document.getElementById('mutant-modal');
+      modal.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+    
+    // Close modal on escape or click outside
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') closeMutantModal();
+    });
+    
+    // Update renderCollection to support search and click to view
+    const originalRenderCollection = renderCollection;
+    renderCollection = function() {
+      const grid = document.getElementById('collection-grid');
+      let display = sortMutants(mutants, currentSort);
+      display = filterMutants(display, currentFilter);
+      
+      // Apply search filter
+      if (searchQuery) {
+        display = display.filter(m => {
+          const searchStr = (m.name || '').toLowerCase() + 
+                           (m.id || '').toLowerCase() + 
+                           (m.number || '').toString();
+          return searchStr.includes(searchQuery);
+        });
+      }
+      
+      const count = window.showAll ? display.length : 50;
+      const shown = display.slice(0, count);
+      
+      grid.innerHTML = shown.map(m => {
+        const cfg = rarityConfig[m.status] || rarityConfig.common;
+        const traits = getTraits(m.id);
+        const satNum = m.number ? Math.floor(m.number) : null;
+        const imgUrl = getImageUrl(m.id);
+        const satBadge = getRareSatBadge(satNum);
+        
+        let traitsHtml = '';
+        if (traits && traits.meta && traits.meta.attributes) {
+          traitsHtml = traits.meta.attributes.slice(0, 4).map(t => 
+            `<div class="trait"><span class="trait-type">${t.trait_type}:</span> <span class="trait-value">${t.value}</span></div>`
+          ).join('');
+        }
+        
+        return `
+          <div class="mutant-card" style="border-left: 3px solid ${cfg.color}; cursor: pointer;" onclick="openMutantModal('${m.id}')">
+            <div class="mutant-header">
+              <span class="mutant-rank">#${m.rank}</span>
+            </div>
+            <div class="mutant-image">
+              <img src="${imgUrl}" alt="${m.name}" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect fill=%22%23111%22 width=%22100%22 height=%22100%22/><text x=%2250%22 y=%2255%22 text-anchor=%22middle%22 fill=%22${cfg.color.replace('#','')}%22 font-size=%2240%22>${cfg.icon}</text></svg>'" />
+              <div class="mutant-badges-bottom">${satBadge}</div>
+            </div>
+            <div class="mutant-name">${m.name || 'OrdiMutant'}</div>
+            <div class="mutant-inscription">${m.id.substring(0, 22)}...</div>
+            <div class="mutant-score">Score: ${m.rarityScore?.toFixed(1) || 'N/A'}</div>
+            <div class="mutant-traits">${traitsHtml}</div>
+            <div class="rarity-badge" style="color: ${cfg.color}">${cfg.label}</div>
+            <a href="https://ordinals.com/inscription/${m.id}" target="_blank" class="view-ordinals" onclick="event.stopPropagation();">View on Ordinals ↗</a>
+          </div>
+        `;
+      }).join('');
+      
+      document.getElementById('collection-count').textContent = 
+        `${Math.min(count, display.length)} / ${display.length} mutants`;
+      
+      // Update search count
+      if (searchQuery) {
+        document.getElementById('collection-count').textContent += ' (search)';
+      }
+    };
   </script>
+  
+  <!-- Modal Viewer -->
+  <div id="mutant-modal" class="modal-overlay" onclick="if(event.target === this) closeMutantModal()">
+    <div class="modal-content">
+      <button class="modal-close" onclick="closeMutantModal()">×</button>
+      <img id="modal-image" class="modal-image" src="" alt="Mutant">
+      <div class="modal-details">
+        <div id="modal-name" class="modal-name">Loading...</div>
+        <div id="modal-inscription" class="modal-inscription"></div>
+        <div id="modal-sat" class="modal-inscription" style="color: var(--accent-glow);"></div>
+        <div class="modal-badges" id="modal-badges"></div>
+        <div class="modal-links">
+          <a id="modal-ordinals-link" href="#" target="_blank">View on Ordinals ↗</a>
+          <a id="modal-magiceden-link" href="#" target="_blank">View on Magic Eden ↗</a>
+        </div>
+      </div>
+    </div>
+  </div>
 </body>
 </html>
