@@ -242,12 +242,13 @@ function toggleShowAll() {
 
 // Initialize
 console.log("Loading collection data...");
-  Promise.all([
+Promise.all([
   fetch('data/mutants.csv').then(r => r.text()),
   fetch('data/metadata.json').then(r => r.json()),
   fetch('data/mutant_to_sat.json').then(r => r.json()),
   fetch('data/mutant_badges.json').then(r => r.json()).catch(() => ({}))
 ]).then(([csv, meta, satMap, badges]) => {
+  console.log("Data loaded, processing...");
   mutants = parseCSV(csv);
   meta.forEach(m => { metadata[m.id] = m; });
   mutantToSat = satMap;
@@ -267,4 +268,8 @@ console.log("Loading collection data...");
   });
   statsHtml += `<button class="filter-btn all" data-filter="all" onclick="setFilter('all')" style="border-color: var(--text-dim)">All</button>`;
   document.getElementById('rarity-stats').innerHTML = statsHtml;
+}).catch(err => {
+  console.error("Error loading collection data:", err);
+  document.getElementById('collection-grid').innerHTML = '<p style="color:red;">Error loading data. Check console for details.</p>';
+});
 });
