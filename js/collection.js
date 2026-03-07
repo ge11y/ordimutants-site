@@ -11,24 +11,25 @@ const rarityConfig = {
 };
 
 const satBadgeConfig = {
-  "Vintage": {"icon": "🕐", "color": "#fbbf24", "name": "Vintage"},
-  "Silk Road": {"icon": "🐪", "color": "#a0522d", "name": "Silk Road"},
-  "Hitman": {"icon": "🎯", "color": "#dc143c", "name": "Hitman"},
-  "Pizza": {"icon": "🍕", "color": "#ff6347", "name": "Pizza"},
-  "JPEG": {"icon": "📸", "color": "#ff69b4", "name": "JPEG"},
-  "Nakamoto": {"icon": "👤", "color": "#4a4a4a", "name": "Nakamoto"},
-  "Block 9": {"icon": "9️⃣", "color": "#ffffff", "name": "Block 9"},
-  "Block 286": {"icon": "286", "color": "#ffd700", "name": "Block 286"},
-  "Black Uncommon": {"icon": "⬛", "color": "#000000", "name": "Black Uncommon"},
-  "First Transaction": {"icon": "🔺", "color": "#8b4513", "name": "First Transaction"},
-  "Palindrome": {"icon": "🦋", "color": "#ff00ff", "name": "Palindrome"},
-  "Paliblock Palindrome": {"icon": "🦋⬛", "color": "#000000", "name": "Paliblock Palindrome"},
-  "Block 666": {"icon": "👹", "color": "#8b0000", "name": "Block 666"},
-  "Block 78": {"icon": "78", "color": "#9400d3", "name": "Block 78"},
-  "Omega": {"icon": "Ω", "color": "#00ff00", "name": "Omega"},
-  "Alpha": {"icon": "Α", "color": "#00ffff", "name": "Alpha"},
-  "Uncommon": {"icon": "◆", "color": "#228b22", "name": "Uncommon"},
-  "Block 9 450x": {"icon": "9💎", "color": "#ff1493", "name": "Block 9 450x"},
+  "Vintage": {"icon": "<img src='badges/badge_01.png' alt='Vintage'>", "color": "#fbbf24", "name": "Vintage"},
+  "Silk Road": {"icon": "<img src='badges/badge_02.png' alt='Silk Road'>", "color": "#a0522d", "name": "Silk Road"},
+  "Hitman": {"icon": "<img src='badges/badge_03.png' alt='Hitman'>", "color": "#dc143c", "name": "Hitman"},
+  "Pizza": {"icon": "<img src='badges/badge_04.png' alt='Pizza'>", "color": "#ff6347", "name": "Pizza"},
+  "JPEG": {"icon": "<img src='badges/badge_05.png' alt='JPEG'>", "color": "#ff69b4", "name": "JPEG"},
+  "Block 666": {"icon": "<img src='badges/badge_06.png' alt='Block 666'>", "color": "#8b0000", "name": "Block 666"},
+  "Nakamoto": {"icon": "<img src='badges/badge_07.png' alt='Nakamoto'>", "color": "#4a4a4a", "name": "Nakamoto"},
+  "First Transaction": {"icon": "<img src='badges/badge_08.png' alt='First Transaction'>", "color": "#8b4513", "name": "First Transaction"},
+  "Block 9": {"icon": "<img src='badges/badge_09.png' alt='Block 9'>", "color": "#ffffff", "name": "Block 9"},
+  "Block 286": {"icon": "<img src='badges/badge_10.png' alt='Block 286'>", "color": "#ffd700", "name": "Block 286"},
+  "Black Uncommon": {"icon": "<img src='badges/badge_11.png' alt='Black Uncommon'>", "color": "#000000", "name": "Black Uncommon"},
+  "Palindrome": {"icon": "<img src='badges/badge_12.png' alt='Palindrome'>", "color": "#ff00ff", "name": "Palindrome"},
+  "Omega": {"icon": "<img src='badges/badge_13.png' alt='Omega'>", "color": "#00ff00", "name": "Omega"},
+  "Alpha": {"icon": "<img src='badges/badge_14.png' alt='Alpha'>", "color": "#00ffff", "name": "Alpha"},
+  "Uncommon": {"icon": "<img src='badges/badge_15.png' alt='Uncommon'>", "color": "#228b22", "name": "Uncommon"},
+  "Block 78": {"icon": "<img src='badges/badge_16.png' alt='Block 78'>", "color": "#9400d3", "name": "Block 78"},
+  "Paliblock Palindrome": {"icon": "<img src='badges/badge_17.png' alt='Paliblock'>", "color": "#000000", "name": "Paliblock Palindrome"},
+  "Block 9 450x": {"icon": "<img src='badges/badge_18.png' alt='Block 9 450x'>", "color": "#ff1493", "name": "Block 9 450x"},
+  "Common": {"icon": "🔹", "color": "#6b7280", "name": "Common"}
 };
 
 let mutants = [];
