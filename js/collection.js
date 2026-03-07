@@ -64,25 +64,25 @@ const slugToKey = {
 
 // Badge image mapping (slug -> badge filename)
 const BADGE_IMAGE_MAP = {
-  'vintage': 'badge_02.png',         // Golden clock
-  'silk_road': 'badge_03.png',       // Camel
-  'hitman': 'badge_04.png',          // Red crosshair/target
-  'pizza': 'badge_05.png',           // Pizza slice
-  'jpeg': 'badge_06.png',             // Polaroid camera
-  'nakamoto': 'badge_08.png',         // Hooded figure
-  'block_9': 'badge_10.png',         // Number "9"
-  'block_286': 'badge_11.png',        // "286" text
-  'black_uncommon': 'badge_12.png',  // Black diamond
-  'first_transaction': 'badge_16.png', // Triangle symbol
-  'palindrome': 'badge_15.png',      // Rainbow butterfly
-  'paliblock_palindrome': 'badge_15.png', // Same butterfly (tinted black via CSS)
-  'block_666': 'badge_07.png',        // Demon armor
-  'omega': 'badge_14.png',            // Purple gem
-  'alpha': 'badge_01.png',            // Silver coin/shield
-  'uncommon': 'badge_13.png',         // Bread/rocks
-  'block_78': 'badge_17.png',         // Brown gem
-  'block_9_450x': 'badge_10.png',    // Number 9
-  'common': 'badge_01.png',           // Default silver coin
+  'vintage': 'badge_01.png',
+  'silk_road': 'badge_02.png',
+  'hitman': 'badge_03.png',
+  'pizza': 'badge_04.png',
+  'jpeg': 'badge_05.png',
+  'block_666': 'badge_06.png',
+  'nakamoto': 'badge_07.png',
+  'first_transaction': 'badge_08.png',
+  'block_9': 'badge_09.png',
+  'block_286': 'badge_10.png',
+  'black_uncommon': 'badge_11.png',
+  'palindrome': 'badge_12.png',
+  'omega': 'badge_13.png',
+  'alpha': 'badge_14.png',
+  'uncommon': 'badge_15.png',
+  'block_78': 'badge_16.png',
+  'paliblock_palindrome': 'badge_17.png',
+  'block_9_450x': 'badge_18.png',
+  'common': 'badge_01.png'
 };
 
 // Humanize slug for tooltip
