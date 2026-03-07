@@ -273,4 +273,3 @@ Promise.all([
   console.error("Error loading collection data:", err);
   document.getElementById('collection-grid').innerHTML = '<p style="color:red;">Error loading data. Check console for details.</p>';
 });
-});
